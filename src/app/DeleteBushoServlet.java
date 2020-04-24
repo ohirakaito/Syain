@@ -61,6 +61,7 @@ public class DeleteBushoServlet extends HttpServlet {
 				"MS_BUSHO \n" +
 				"where  \n" +
 				"BUSHO_ID = '"+itemId+"'";
+		boolean result=true;
 
 		// エラーが発生するかもしれない処理はtry-catchで囲みます
 		// この場合はDBサーバへの接続に失敗する可能性があります
@@ -72,6 +73,9 @@ public class DeleteBushoServlet extends HttpServlet {
 			) {
 			// SQLの命令文を実行し、その件数をint型のresultCountに代入します
 			int resultCount = stmt.executeUpdate(sql);
+			if(resultCount!=1){
+				result=false;
+			}
 		} catch (Exception e) {
 			throw new RuntimeException(String.format("検索処理の実施中にエラーが発生しました。詳細：[%s]", e.getMessage()), e);
 		}
@@ -79,7 +83,7 @@ public class DeleteBushoServlet extends HttpServlet {
 		// アクセスした人に応答するためのJSONを用意する
 		PrintWriter pw = response.getWriter();
 		// JSONで出力する
-		pw.append(new ObjectMapper().writeValueAsString("ok"));
+		pw.append(new ObjectMapper().writeValueAsString(result));
 	}
 
 	/**
