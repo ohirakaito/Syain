@@ -26,12 +26,14 @@ function executeAjax () {
 				 tableElement+='<tr>'
 								+'<td>'+busho.bushoId+'</td>'
 								+'<td>'+busho.bushoName+'</td>'
-								+'<td>'+'<button id="js-henshu">編集</button>'+'</td>'
+								+'<td>'+'<button id="js-henshu" onclick="location.href=\'./bushoAdd.html\'">編集</button>'+'</td>'
 								+'<td>'+'<button class="js-delete" id='+busho.bushoId+'>削除</button>'+'</td>'
 								+'</tr>'
 				$('#bushoData').append(tableElement);
 				// $('#'+busho.bushoId).click(DeleteItem(busho.bushoId));
+				// onclick="location.href='./bushoAdd.html'"
 			}
+
 
 		}
 	});
@@ -51,7 +53,8 @@ $(document).ready(function () {
 
 });
 //削除
-function DeleteItem (itemId) {
+
+function DeleteItem (itemId){
 	var requestQuery={itemId:itemId};
 
 
@@ -87,6 +90,6 @@ function DeleteItem (itemId) {
  */
 /*$(document).ready(function() {
 	// 登録ボタンを押したときのイベント
-	$('.js-delete').click(deleteItem);
+	$('.js-delete').click(deleteItem());
 
 });*/

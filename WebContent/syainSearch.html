@@ -1,13 +1,34 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>社員データベース検索ページ</title>
-<!-- JavaScriptの読み込み -->
-		<script type="text/javascript" src="jquery-1.10.2.js"></script>
-		<script type="text/javascript" src="syainSearch.js"></script>
-</head>
-<body>
+	<!DOCTYPE html>
+	<html>
+	<head>
+	<meta charset="UTF-8">
+	<title>社員データベース検索ページ</title>
+	<!-- JavaScriptの読み込み -->
+			<script type="text/javascript" src="jquery-1.10.2.js"></script>
+			<script type="text/javascript" src="syainSearch.js"></script>
+			<script type="text/javascript" src="jquery-1.10.2.js"></script>
+			<script type="text/javascript" src="bushoPull.js"></script>
+	</head>
+	<body>
+	<div><h1>条件を指定して社員情報を検索します。</h1></div>
+	 <p>
+           所属部署:
+           <select name="busho" id="depart">
+               <option value="" id="not">未指定</option>
 
-</body>
-</html>
+
+           </select>
+       </p>
+	<p>
+           <label for="ID">社員ID: </label>
+           <input type="text" name="ID" id="add_ID">
+       </p>
+	<p>
+           <label for="likeName">名前に含む文字: </label>
+           <input type="text" name="likeName" id="likeName">
+       </p>
+	<div><button id="js-search-button">検索</button></div>
+
+
+	</body>
+	</html>
