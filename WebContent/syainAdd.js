@@ -2,9 +2,30 @@
 var registItem2 = function () {
 	var inputItemName=$("#add_Name").val();
 	var inputItemNo=$('#add_ID').val();
+	var inputItemAge=$('#add_Age').val();
+	var elements = document.getElementsByName( "gender" ) ;
+	for ( var a="", i=elements.length; i--; ) {
+		if ( elements[i].checked ) {
+			var a = elements[i].value ;
+			break ;
+		}
+	}
+	var inputItemGender=a;
+	var inputItemPic=$('#pic').val();
+	var inputItemPost=$('#post_code').val();
+	var inputItemPref=$('#pref_name').val();
+	var inputItemAddres=$('#addres').val();
+	var inputItemBushoId=$('#busho_Id').val();
 	var requestQuery = {
 			itemNo:inputItemNo,
-			itemName:inputItemName
+			itemName:inputItemName,
+			itemAge:inputItemAge,
+			itemGender:inputItemGender,
+			itemPic:inputItemPic,
+			itemPost:inputItemPost,
+			itemPref:inputItemPref,
+			itemAddres:inputItemAddres,
+			itemBusho:inputItemBushoId
 	};
 	console.log('requestQuery',requestQuery);
 	// サーバーにデータを送信する。

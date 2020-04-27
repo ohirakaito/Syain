@@ -49,7 +49,7 @@ public class SyainServlet extends HttpServlet {
 											"SYAIN_NO \n" +
 											",SYAIN_NAME \n" +
 											"from MS_SYAIN_INF \n" );){
-			System.out.println("テスト");
+
 
 			List<Syain> SyainList=new ArrayList<Syain>();
 

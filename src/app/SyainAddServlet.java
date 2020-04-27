@@ -48,6 +48,13 @@ public class SyainAddServlet extends HttpServlet {
 
 		String itemNo = request.getParameter("itemNo");
 		String itemName = request.getParameter("itemName");
+		String itemAge = request.getParameter("itemAge");
+		String itemGender = request.getParameter("itemGender");
+		String itemPic = request.getParameter("itemPic");
+		String itemPost = request.getParameter("itemPost");
+		String itemPref = request.getParameter("itemPref");
+		String itemAddres = request.getParameter("itemAddres");
+		String itemBushoId = request.getParameter("itemBushoId");
 
 
 
@@ -68,9 +75,9 @@ public class SyainAddServlet extends HttpServlet {
 		String pass = "wt2";
 
 		// 実行するSQL文
-		String sql ="insert into MS_SYAIN_INF \n"
-				    +"(SYAIN_NO, SYAIN_NAME)\n"
-				    +"values\n"+"('"+itemNo+"','"+itemName+"')";
+		String sql ="insert into MS_SYAIN_INF \n" +
+				"(SYAIN_NO, SYAIN_NAME,AGE,GENDER,PHOTO_ID,ADRES,BUSHO_ID) \n" +
+				"values('"+itemNo+"','"+itemName+"','"+itemAge+"','"+itemGender+"','"+itemPic+"','"+itemPost+"' '"+itemPref+"' '"+itemAddres+"',''"+itemBushoId+"',); \n";
 
 		// エラーが発生するかもしれない処理はtry-catchで囲みます
 		// この場合はDBサーバへの接続に失敗する可能性があります
