@@ -8,6 +8,8 @@
 		<!-- JavaScriptの読み込み -->
 		<script type="text/javascript" src="jquery-1.10.2.js"></script>
 		<script type="text/javascript" src="syainAdd.js"></script>
+		<script type="text/javascript" src="jquery-1.10.2.js"></script>
+			<script type="text/javascript" src="bushoPull.js"></script>
 	</head>
 	<body>
 	<div><h1>社員データを修正します</h1></div>
@@ -37,7 +39,7 @@
            <input type="text" name="post_code" id="post_code">
        </p>
        <p>都道府県：
-		       <select name="pref_name">
+		       <select name="pref_name" id="pref_name">
 		<option value="" selected>都道府県</option>
 		<option value="北海道">北海道</option>
 		<option value="青森県">青森県</option>
@@ -93,9 +95,12 @@
            <input type="text" name="addres" id="addres">
        </p>
 		 <p>
-           <label for="busho_Id">部署ID: </label>
-           <input type="text" name="busho_Id" id="busho_Id">
-       </p>
+           所属部署:
+           <select name="busho" id="depart">
+               <option value="" id="not">未指定</option>
+
+           </select>
+       </p>
 		<!-- <p>
            <label for="start">入社日: </label>
            <input type="text" name="start" id="start">
@@ -104,7 +109,7 @@
            <label for="goal">退社日: </label>
            <input type="text" name="goal" id="goal">
        </p> -->
-		<div><button id="js-register-button">設定</button></div>
+	    <div id="add-button"></div>
 		<div><button id="js-cancel">キャンセル</button></div>
 
 

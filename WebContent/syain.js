@@ -30,7 +30,7 @@ function executeAjax () {
 				 tableElement+='<tr>'
 								+'<td>'+syain.syainNo+'</td>'
 								+'<td>'+syain.syainName+'</td>'
-								+'<td>'+'<button id="js-henshu"  onclick="location.href=\'./syainAdd.html\'">編集</button>'+'</td>'
+								+'<td>'+'<button class="js-henshu" id='+syain.syainNo+' onclick="location.href=\'./syainAdd.html?itemNo='+syain.syainNo+'\'">編集</button>'+'</td>'
 								+'<td>'+'<button class="js-delete-button" id='+syain.syainNo+'>削除</button>'+'</td>'
 								+'</tr>'
 				$('#syainData').append(tableElement);
@@ -50,6 +50,7 @@ $(document).ready(function () {
 
 	// 更新ボタンにイベント設定
 	$('.js-delete-button').click((e)=>DeleteItem($(e.currentTarget).attr('id')));
+	$('.js-henshu').click((e)=>ChangeItem($(e.currentTarget).attr('id')));
 	$('#searchBtn').bind('click',executeAjax);
 
 });

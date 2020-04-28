@@ -1,6 +1,10 @@
 	var getItemSyain = function () {
 
-	var inputItemBusho=$('#depart').val();
+	var inputItemBusho = $('#depart').val();
+	console.log('部署名',inputItemBusho);
+	if(inputItemBusho=='未指定'){
+		inputItemBusho='';
+	}
 	var inputItemId = $('#add_ID').val();
 	console.log('社員ID',inputItemId);
 	var inputItemName=$('#likeName').val();
@@ -10,6 +14,7 @@
 	itemId : inputItemId,
 	itemName:inputItemName
 	};
+	console.log(requestQuery);
 	// サーバーからデータを取得する
 	$.ajax({
 	type : 'GET',
@@ -23,6 +28,11 @@
 	// 取得したデータを画面に表示する
 	//$('#searchId').html(json.syainNo);
 	//$('#searchName').html(json.syainName);
+	if(json.length==0){
+		$('#not').html('該当する社員いません');
+	}else{
+		$('#not').html('条件を指定して社員情報を検索しました');
+	}
 	for(var i=0;i<json.length;i++){
 		var item = json[i];
 		var tableElement='';

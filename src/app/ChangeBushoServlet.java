@@ -15,46 +15,28 @@ import javax.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * Servlet implementation class ItemRegistServlet
+ * Servlet implementation class ChangeBushoServlet
  */
-@WebServlet("/SyainAddServlet")
-public class SyainAddServlet extends HttpServlet {
+@WebServlet("/ChangeBushoServlet")
+public class ChangeBushoServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public SyainAddServlet() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public ChangeBushoServlet() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		String itemNo = request.getParameter("itemNo");
+		String itemId = request.getParameter("itemId");
 		String itemName = request.getParameter("itemName");
-		String itemAge = request.getParameter("itemAge");
-		String itemGender = request.getParameter("itemGender");
-		String itemPic = request.getParameter("itemPic");
-		String itemPost = request.getParameter("itemPost");
-		String itemPref = request.getParameter("itemPref");
-		String itemAddres = request.getParameter("itemAddres");
-		String itemBushoName = request.getParameter("itemBushoName");
 
 
 
@@ -75,9 +57,14 @@ public class SyainAddServlet extends HttpServlet {
 		String pass = "wt2";
 
 		// 実行するSQL文
-		String sql ="insert into MS_SYAIN_INF \n" +
-				"(SYAIN_NO, SYAIN_NAME,AGE,GENDER,PHOTO_ID,ADRES,BUSHO_NAME) \n" +
-				"values('"+itemNo+"','"+itemName+"','"+itemAge+"','"+itemGender+"','"+itemPic+"','"+itemPost+" "+itemPref+" "+itemAddres+"','"+itemBushoName+"') \n";
+		String sql ="UPDATE \n" +
+				"MS_BUSHO \n" +
+				"SET \n" +
+				"BUSHO_ID = '"+itemId+"' \n" +
+				",BUSHO_NAME='"+itemName+"' \n" +
+				"WHERE \n" +
+				"BUSHO_ID = '"+itemId+"' \n" ;
+		boolean result=true;
 
 		// エラーが発生するかもしれない処理はtry-catchで囲みます
 		// この場合はDBサーバへの接続に失敗する可能性があります
@@ -89,6 +76,9 @@ public class SyainAddServlet extends HttpServlet {
 			) {
 			// SQLの命令文を実行し、その件数をint型のresultCountに代入します
 			int resultCount = stmt.executeUpdate(sql);
+			if(resultCount!=1){
+				result=false;
+			}
 		} catch (Exception e) {
 			throw new RuntimeException(String.format("検索処理の実施中にエラーが発生しました。詳細：[%s]", e.getMessage()), e);
 		}
@@ -96,7 +86,16 @@ public class SyainAddServlet extends HttpServlet {
 		// アクセスした人に応答するためのJSONを用意する
 		PrintWriter pw = response.getWriter();
 		// JSONで出力する
-		pw.append(new ObjectMapper().writeValueAsString("ok"));
+		pw.append(new ObjectMapper().writeValueAsString(result));
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
 	}
 
 }

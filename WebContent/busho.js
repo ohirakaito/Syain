@@ -26,7 +26,7 @@ function executeAjax () {
 				 tableElement+='<tr>'
 								+'<td>'+busho.bushoId+'</td>'
 								+'<td>'+busho.bushoName+'</td>'
-								+'<td>'+'<button id="js-henshu" onclick="location.href=\'./bushoAdd.html\'">編集</button>'+'</td>'
+								+'<td>'+'<button class="js-henshu" id='+busho.bushoId+' onclick="location.href=\'./bushoAdd.html?itemId='+busho.bushoId+'\'">編集</button>'+'</td>'
 								+'<td>'+'<button class="js-delete" id='+busho.bushoId+'>削除</button>'+'</td>'
 								+'</tr>'
 				$('#bushoData').append(tableElement);
@@ -49,6 +49,7 @@ $(document).ready(function () {
 
 	// 更新ボタンにイベント設定
 	$('.js-delete').click((e)=>DeleteItem($(e.currentTarget).attr('id')));
+	$('.js-henshu').click((e)=>ChangeItem($(e.currentTarget).attr('id')));
 	$('#searchBtn').bind('click',executeAjax);
 
 });
@@ -83,6 +84,7 @@ function DeleteItem (itemId){
 		}
 	});
 }
+//編集
 
 
 /**

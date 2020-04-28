@@ -42,6 +42,7 @@ public class SyainSearchServlet extends HttpServlet {
          	String itemBusho = request.getParameter("itemBusho");
     	    String itemId = request.getParameter("itemId");
     		String itemName = request.getParameter("itemName");
+    		System.out.println(itemBusho+itemId+itemName);
 
     		// JDBCドライバの準備
     		try {
@@ -61,9 +62,10 @@ public class SyainSearchServlet extends HttpServlet {
     				"SYAIN_NO \n" +
     				",SYAIN_NAME \n" +
     				"from \n" +
-    				"MS_SYAIN_INF,MS_BUSHO \n" +
-    				"where \n" +
-    				" SYAIN_NO='"+itemId+"' AND SYAIN_NAME like '%"+itemName+"%'  AND BUSHO_NAME='"+itemBusho+"' \n"; {
+    				"MS_SYAIN_INF \n" +
+    				"where \n"+
+    				"SYAIN_NO like '%"+itemId+"%' AND SYAIN_NAME like '%"+itemName+"%' AND BUSHO_NAME like'%"+itemBusho+"%' \n";
+    		System.out.println(sql);
 
     		// エラーが発生するかもしれない処理はtry-catchで囲みます
     		// この場合はDBサーバへの接続に失敗する可能性があります
@@ -78,7 +80,7 @@ public class SyainSearchServlet extends HttpServlet {
     		ResultSet rs1 = stmt.executeQuery(sql);) {
 
 
-    			if (rs1.next()) {
+    			while(rs1.next()) {
     				Item item = new Item();
     			item.setSyainNo(rs1.getString("SYAIN_NO"));
     			item.setSyainName(rs1.getString("SYAIN_NAME"));
@@ -93,7 +95,7 @@ public class SyainSearchServlet extends HttpServlet {
     			// JSONで出力する
     			pw.append(new ObjectMapper().writeValueAsString(ItemList));
     			}
-    }
+
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
