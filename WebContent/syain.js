@@ -72,6 +72,7 @@ function DeleteItem (itemId){
 			// 登録完了のアラート
 			if(result==true){
 			alert('削除が完了しました');
+			location.reload();
 			}
 			else if(result==false){
 				alert('NG');
