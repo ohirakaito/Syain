@@ -23,6 +23,28 @@ public class SyainServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException {
 
+	/*	response.setContentType("text/html;charset=UTF-8");
+		HttpSession session = request.getSession(true);
+		String status = (String) session.getAttribute("login");
+		String loginRequest = request.getParameter("loginRequest");
+		PrintWriter pw = response.getWriter();
+
+		if(status == null) {//未ログイン
+			if(loginRequest != null &&  loginRequest.equals("login")) {
+				session.setAttribute("login", "ok");
+				pw.append(new ObjectMapper().writeValueAsString("ログイン完了。"));
+			}else {
+				pw.append(new ObjectMapper().writeValueAsString("ログインして下さい。"));
+			}
+		}else{//ログイン済み
+				if (loginRequest != null && loginRequest.equals("logout")){
+					session.removeAttribute("login");
+					pw.append(new ObjectMapper().writeValueAsString("ログアウト完了。"));
+			}
+			else {
+				pw.append(new ObjectMapper().writeValueAsString("ログイン済み"));
+			}*/
+
 		try {
 			// JDBCドライバのロード
 			Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -65,19 +87,21 @@ public class SyainServlet extends HttpServlet {
 
 
 			// アクセスした人に応答するためのJSONを用意する
-			PrintWriter pw = response.getWriter();
+
 
 			// JSONで出力する
+			PrintWriter pw = response.getWriter();
+
 			pw.append(new ObjectMapper().writeValueAsString(SyainList));
 
 		} catch (Exception e) {
 			throw new RuntimeException(String.format("検索処理の実施中にエラーが発生しました。詳細：[%s]", e.getMessage()), e);
 		}
 
-
+		}
 
 		// -- ここまで --
-	}
+
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException {
