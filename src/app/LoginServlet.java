@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.HashMap;
@@ -38,84 +37,107 @@ public class LoginServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	response.setContentType("text/html;charset=UTF-8");
+    	//response.setContentType("text/html;charset=UTF-8");
 		HttpSession session = request.getSession(true);
-		String status = (String) session.getAttribute("login");
+		String status = (String) session.getAttribute("SyainNo");
 		String loginRequest = request.getParameter("loginRequest");
 		PrintWriter pw = response.getWriter();
+		Map<String,String> responseData=new HashMap<>();
 		if(status == null) {
-			if(loginRequest != null &&  loginRequest.equals("login")) {
-				session.setAttribute("login", "ok");
-				pw.append(new ObjectMapper().writeValueAsString("ログイン完了。"));
-			}else {
-				pw.append(new ObjectMapper().writeValueAsString("ログインして下さい。"));
-			}
+			/*if(loginRequest != null &&  loginRequest.equals("login")) {
+				session.setAttribute("SyainNo", "ok");
+				pw.append(new ObjectMapper().writeValueAsString("success"));
+			}else {*/
+				responseData.put("json", "needLogin");
+				//pw.append(new ObjectMapper().writeValueAsString("ログインして下さい。"));
+
 		}else {
 			if (loginRequest != null && loginRequest.equals("logout")){
-				session.removeAttribute("login");
-				pw.append(new ObjectMapper().writeValueAsString("ログアウト完了。"));
+				session.removeAttribute("SyainNo");
+				session.removeAttribute("SyainName");
+				session.removeAttribute("ROLE");
+				responseData.put("json", "Logout");
+				//pw.append(new ObjectMapper().writeValueAsString("ログアウト完了。"));
 			}else {
-				pw.append(new ObjectMapper().writeValueAsString("ログイン済み"));
+				//pw.append(new ObjectMapper().writeValueAsString("ログイン済み"));
+
+				responseData.put("SyainNo",(String)session.getAttribute("SyainNo"));
+				responseData.put("SyainName",(String)session.getAttribute("SyainName"));
+				responseData.put("ROLE",(String)session.getAttribute("ROLE"));
 			}
 		}
+		pw.append(new ObjectMapper().writeValueAsString(responseData));
 	}
+
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String EmpId=request.getParameter("EmpId");
+		String SyainNo=request.getParameter("SyainNo");
 		String Pass=request.getParameter("Pass");
 
-		PrintWriter pw = response.getWriter();
-
-		prepareConnectToDB();
-
+		try {
+			// JDBCドライバのロード
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			} catch (ClassNotFoundException e) {
+			// ドライバが設定されていない場合はエラーになります
+			throw new RuntimeException(String.format("JDBCドライバのロードに失敗しました。詳細:[%s]", e.getMessage()), e);
+			}
 
 		String url = "jdbc:log4jdbc:oracle:thin:@localhost:1521:XE";
 		String user = "wt2";
 		String pass = "wt2";
 
+		String sql="select SI.SYAIN_NO,SI.SYAIN_NAME,SL.ROLE \n" +
+				"from MS_LOGIN  SL, \n" +
+				"MS_SYAIN_INF SI \n" +
+				"where 1=1 \n" +
+				"and SI.SYAIN_NO='"+SyainNo+"' \n" +
+				"and SL.PASS='"+Pass+"' \n" +
+				"and SI.SYAIN_NO=SL.SYAIN_NO";
 		try (
 				// データベースへ接続します
 				Connection con = DriverManager.getConnection(url, user, pass);
 
 				// SQLの命令文を実行するための準備をおこないます
-				PreparedStatement stmt = createPreparedStatement(con,EmpId,Pass);
+				Statement stmt = con.createStatement();
 
 				// SQLの命令文を実行し、その結果をResultSet型のrsに代入します
-				ResultSet rs1 = stmt.executeQuery();){
-			Map <String,String> responseData=new HashMap<>();
-			if(rs1.next()){
-				responseData.put("result", "ok");
-				responseData.put("EmpId",rs1.getString("EMP_ID"));
-				responseData.put("EmpPass",rs1.getString("Pass"));
+				ResultSet rs1 = stmt.executeQuery(sql);) {
+
+
+
+			Map<String,String> responseLog = new HashMap<>();
+
+			HttpSession session = request.getSession(true);
+
+			if (rs1.next()) {
+				responseLog.put("result", "ok");
+				session.setAttribute("SyainNo",rs1.getString("SYAIN_NO"));
+				session.setAttribute("SyainName",rs1.getString("SYAIN_NAME"));
+				session.setAttribute("ROLE",rs1.getString("ROLE"));
+
+				System.out.println(session.getAttribute("SyainNo"));
+				System.out.println(session.getAttribute("SyainName"));
+				System.out.println(session.getAttribute("ROLE"));
+
 			}else{
-				responseData.put("result", "ng");
+				responseLog.put("result", "ng");
 			}
-			pw.append(new ObjectMapper().writeValueAsString(responseData));
-		}catch (Exception e){
+
+			// アクセスした人に応答するためのJSONを用意する
+			PrintWriter pw = response.getWriter();
+
+			// JSONで出力する
+			pw.append(new ObjectMapper().writeValueAsString(responseLog));
+
+		} catch (Exception e) {
 			throw new RuntimeException(String.format("検索処理の実施中にエラーが発生しました。詳細：[%s]", e.getMessage()), e);
 		}
 
-private void prepareConnectToDB(){
-	try {
-		// JDBCドライバのロード
-		Class.forName("oracle.jdbc.driver.OracleDriver");
-		} catch (ClassNotFoundException e) {
-		// ドライバが設定されていない場合はエラーになります
-		throw new RuntimeException(String.format("JDBCドライバのロードに失敗しました。詳細:[%s]", e.getMessage()), e);
-		}
+
+	}
 }
-	private PreparedStatement createPreparedStatement(Connection con,String userId,String pass){
-		System.out.println("userId="+userId);
-		System.out.println("pass="+pass);
-		return stmt;
-	}
-		//doGet(request, response);
-	}
-
-	}
-
 

@@ -1,3 +1,30 @@
+var userRole;
+var userName;
+var userId;
+
+function getLoginInf () {
+	'use strict';
+
+	$.ajax({
+		type : 'GET',
+		url : '/myFirstApp/LoginServlet',
+		dataType : 'json',
+		async: false,
+		success : function (json) {
+			console.log(json);
+
+
+			if(!json.SyainNo){
+				location.href='login.html'
+			}else{
+				userRole=json.ROLE;
+				userName=json.SyainName
+				userId=json.SyainNo
+				executeAjax ();
+			}
+		}
+	});
+}
 
 
 /**
@@ -20,38 +47,55 @@ function executeAjax () {
 		async: false,
 		success : function (json) {
 			console.log(json);
-			//$('#bushodata').html(json.bushoId );
-			//$('#bushodata').html(json.bushoName );
 
 
+			if(userRole==="manager"){
 			for(var i=0;i<json.length;i++){
-				var syain = json[i];
 				var tableElement='';
+				var syain = json[i];
 				 tableElement+='<tr>'
 								+'<td>'+syain.syainNo+'</td>'
 								+'<td>'+syain.syainName+'</td>'
 								+'<td>'+'<button class="js-henshu" id='+syain.syainNo+' onclick="location.href=\'./syainAdd.html?itemNo='+syain.syainNo+'\'">編集</button>'+'</td>'
 								+'<td>'+'<button class="js-delete-button" id='+syain.syainNo+'>削除</button>'+'</td>'
 								+'</tr>'
+				var button='';
+				 button='<button onclick="location.href=\'syainAdd.html'+'\'">新規追加</button>'
+						+'<button onclick="location.href=\'syainSearch.html'+'\'">検索</button>'
 				$('#syainData').append(tableElement);
+				 $('#button').html(button);
 			}
+			}
+			else if(userRole==="member"){
+				for(var i=0;i<json.length;i++){
+					var tableElement='';
+					var syain = json[i];
+					 tableElement+='<tr>'
+							+'<td>'+syain.syainNo+'</td>'
+							+'<td>'+syain.syainName+'</td>'
 
-		}
-	});
-	// ---------------ここまで---------------
+					if(syain.syainNo===userId){
+						 tableElement+='<td><button class="js-henshu" id='+syain.syainNo+' onclick="location.href=\'./syainAdd.html?itemNo='+syain.syainNo+'\'">編集</button></td>'
+					}
+					 $('#syainData').append(tableElement);
+				}
+				}
+			}
+});
 
 }
+
 
 $(document).ready(function () {
 	'use strict';
 
-	// 初期表示用
-	executeAjax();
 
-	// 更新ボタンにイベント設定
+	//executeAjax();
+	getLoginInf ();
+
 	$('.js-delete-button').click((e)=>DeleteItem($(e.currentTarget).attr('id')));
 	$('.js-henshu').click((e)=>ChangeItem($(e.currentTarget).attr('id')));
-	$('#searchBtn').bind('click',executeAjax);
+	//$('#searchBtn').bind('click',getLoginInf ());
 
 });
 
@@ -90,8 +134,3 @@ function DeleteItem (itemId){
 /**
  * 読み込み時の動作
  */
-/*$(document).ready(function() {
-	// 登録ボタンを押したときのイベント
-	$('.js-delete').click(deleteItem());
-
-});*/

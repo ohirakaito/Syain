@@ -1,3 +1,31 @@
+var userRole;
+var userName;
+var userId;
+
+function getLoginInf () {
+	'use strict';
+
+	$.ajax({
+		type : 'GET',
+		url : '/myFirstApp/LoginServlet',
+		dataType : 'json',
+		async: false,
+		success : function (json) {
+			console.log(json);
+
+
+			if(!json.SyainNo){
+				location.href='login.html'
+			}else{
+				userRole=json.ROLE;
+				userName=json.SyainName
+				userId=json.SyainNo
+				executeAjax ();
+			}
+		}
+	});
+}
+
 // AjaxでJSONを取得する
 function executeAjax () {
 	'use strict';
@@ -16,10 +44,8 @@ function executeAjax () {
 		async: false,
 		success : function (json) {
 			console.log(json);
-			//$('#bushodata').html(json.bushoId );
-			//$('#bushodata').html(json.bushoName );
 
-
+			if(userRole==="manager"){
 			for(var i=0;i<json.length;i++){
 				var busho = json[i];
 				var tableElement='';
@@ -29,11 +55,25 @@ function executeAjax () {
 								+'<td>'+'<button class="js-henshu" id='+busho.bushoId+' onclick="location.href=\'./bushoAdd.html?itemId='+busho.bushoId+'\'">編集</button>'+'</td>'
 								+'<td>'+'<button class="js-delete" id='+busho.bushoId+'>削除</button>'+'</td>'
 								+'</tr>'
-				$('#bushoData').append(tableElement);
-				// $('#'+busho.bushoId).click(DeleteItem(busho.bushoId));
-				// onclick="location.href='./bushoAdd.html'"
-			}
 
+				var button='';
+				 button='<button onclick="location.href=\'bushoAdd.html'+'\'">新規追加</button>'
+				$('#bushoData').append(tableElement);
+				 $('#button').html(button);
+			}
+			}
+			else if(userRole==="member"){
+				for(var i=0;i<json.length;i++){
+					var tableElement='';
+					var busho = json[i];
+					tableElement+='<tr>'
+						+'<td>'+busho.bushoId+'</td>'
+						+'<td>'+busho.bushoName+'</td>'
+						+'</tr>'
+				 $('#bushoData').append(tableElement);
+					}
+
+				}
 
 		}
 	});
@@ -45,15 +85,15 @@ $(document).ready(function () {
 	'use strict';
 
 	// 初期表示用
-	executeAjax();
-
+	// executeAjax();
+	getLoginInf ();
 	// 更新ボタンにイベント設定
 	$('.js-delete').click((e)=>DeleteItem($(e.currentTarget).attr('id')));
 	$('.js-henshu').click((e)=>ChangeItem($(e.currentTarget).attr('id')));
-	$('#searchBtn').bind('click',executeAjax);
+	// $('#searchBtn').bind('click',getLoginInf ());
 
 });
-//削除
+// 削除
 
 function DeleteItem (itemId){
 	var requestQuery={itemId:itemId};
@@ -85,14 +125,15 @@ function DeleteItem (itemId){
 		}
 	});
 }
-//編集
+// 編集
 
 
 /**
  * 読み込み時の動作
  */
-/*$(document).ready(function() {
-	// 登録ボタンを押したときのイベント
-	$('.js-delete').click(deleteItem());
-
-});*/
+/*
+ * $(document).ready(function() { // 登録ボタンを押したときのイベント
+ * $('.js-delete').click(deleteItem());
+ *
+ * });
+ */
