@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>経費登録ページ</title>
+<link rel="stylesheet" href="./bushoAdd.css" type="text/css">
+<!-- JavaScriptの読み込み -->
+		<script type="text/javascript" src="jquery-1.10.2.js"></script>
+		<script type="text/javascript" src="keihiAdd.js"></script>
+</head>
+<body>
+<div>
+		<h1>経費登録</h1>
+		</div>
+		<p>
+           <label for="ID">申請ID: </label>
+           <input type="text" name="ID" id="ID">
+       </p>
+		<p>
+           <label for="ymd">申請日: </label>
+           <input type="text" name="ymd" id="YMD">
+       </p>
+<p>
+           <label for="name">申請者: </label>
+           <input type="text" name="name" id="Name">
+       </p>
+<p>
+           <label for="title">タイトル: </label>
+           <input type="text" name="title" id="Title">
+       </p>
+<p>
+           <label for="pay">支払先: </label>
+           <input type="text" name="pay" id="Pay">
+       </p>
+<p>
+           <label for="money">金額: </label>
+           <input type="text" name="money" id="Money">
+       </p>
+<p>
+           <label for="upymd">更新日: </label>
+           <input type="text" name="upymd" id="upYmd">
+       </p>
+<p>
+           <label for="upname">更新者: </label>
+           <input type="text" name="upnamae" id="upName">
+       </p>
+<p>
+           <label for="states">ステータス: </label>
+           <input type="text" name="states" id="States">
+       </p>
+<p>
+           <label for="reason">理由: </label>
+           <input type="text" name="reason" id="Reason">
+       </p>
+		<div id="add-button"></div>
+		<button id="register-button" onclick="registItem()">設定</button>
+		<div><button id="js-cancel">キャンセル</button></div>
+		<button onclick="location.href='login.html?loginRequest=logout'">ログアウト</button>
+</body>
+</html>
